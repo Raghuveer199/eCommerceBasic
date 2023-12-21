@@ -25,7 +25,7 @@ namespace ECommerce.Models
         [RegularExpression(@"^[0-9]{10}$", ErrorMessage = "Invalid phone number")]
         public required string Phone { get; set; }
         [Required(ErrorMessage = "Account type is required")]
-        public string AccountType { get; set; }
+        public string AccountType { get; set; } = "customer";
 
         public void setPassword(string password)
         {
@@ -47,6 +47,6 @@ namespace ECommerce.Models
     public class UserLoginModel
     {
         public required string Phone { set; get; }
-        public string Password { set; get; }
+        public required string Password { set; get; }
     }
 }
