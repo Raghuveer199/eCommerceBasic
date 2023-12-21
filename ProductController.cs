@@ -13,6 +13,7 @@ namespace ECommerce.Controllers
     public class ProductController : ControllerBase
     {
         private static List<product> Products = new List<product>();
+        private static List<string> Categories = new List<string>();
         private static int nextID = 1;
 
         [HttpGet]

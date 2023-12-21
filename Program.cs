@@ -22,8 +22,40 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+/*
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin",
+    builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+*/
+ 
 
+
+ 
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+//app.UseCors();
+
+app.Use(async (ctx, next) =>
+{
+    ctx.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:5500";
+
+    if (HttpMethods.IsOptions(ctx.Request.Method))
+    {
+        ctx.Response.Headers["Access-Control-Allow-Headers"] = "*";
+
+        await ctx.Response.CompleteAsync();
+        return;
+    }
+    await next();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

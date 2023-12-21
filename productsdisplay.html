@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="UTF-8">
+ <title>Products Page</title>
+</head>
+
+<body>
+ <h1>Products</h1>
+
+ <!-- Filter Section -->
+ <div>
+  <label for="category">Category:</label>
+  <select id="category">
+   <!-- Populate categories dynamically using JavaScript -->
+   <option value="Electronics">Electronics</option>
+   <option value="Groceries">Groceries</option>
+  </select>
+
+  <label for="lowPrice">Low Price:</label>
+  <input type="number" id="lowPrice" min="0">
+
+  <label for="highPrice">High Price:</label>
+  <input type="number" id="highPrice" min="0">
+
+  <label for="availability">Availability:</label>
+  <input type="checkbox" id="availability">
+
+  <button onclick="applyFilters()">Apply Filters</button>
+  <button onclick="resetFilters()">Reset Filters</button>
+ </div>
+
+ <!-- Product List -->
+ <div id="productList">
+  <!-- Product items will be displayed here -->
+ </div>
+
+
+
+ <script>
+  // JavaScript code for applying filters and fetching products
+  function applyFilters() {
+   const category = document.getElementById('category').value;
+   const lowPrice = document.getElementById('lowPrice').value;
+   const highPrice = document.getElementById('highPrice').value;
+   const availability = document.getElementById('availability').checked;
+   // Call API endpoint with filters
+   fetchProducts(category, lowPrice, highPrice, availability);
+  }
+
+  function resetFilters() {
+   // Reset filter inputs
+   document.getElementById('category').value = '';
+   document.getElementById('lowPrice').value = '';
+   document.getElementById('highPrice').value = '';
+   document.getElementById('availability').checked = false;
+   // Call API endpoint without filters (to get all products)
+   fetchProducts('', 0, 0, false);
+
+  }
+
+  function fetchProducts(category, low, high, availability) {
+   // Make API call using fetch or XMLHttpRequest to get products with filters
+   const url = `http://localhost:5145/product`;
+   const urlparams = new URLSearchParams();
+   if(category){
+    urlparams.append("category",category)
+   }
+   if(low){
+    urlparams.append("lowPrice",low)
+   }
+   if(high){
+    urlparams.append("highPrice",high)
+   }
+   if(availability){
+    urlparams.append("availability",availability)
+   }
+   fetch(url+`?${urlparams.toString()}`)
+    .then(response => response.json())
+    .then(products => displayProducts(products))
+    .catch(error => console.error('Error fetching products:', error));
+  }
+
+  function displayProducts(products) {
+   const productListDiv = document.getElementById('productList');
+   productListDiv.innerHTML = ''; // Clear previous product list
+
+   // Display products in the productListDiv
+   products.forEach(product => {
+    const productDiv = document.createElement('div');
+    productDiv.innerHTML = `
+     <h3>${product.name}</h3>
+     <p>Category: ${product.category}</p>
+     <p>Price: ${product.price}</p>
+     <p>Quantity: ${product.quantity}</p>
+     <!-- Add more details as needed -->
+    `;
+    productListDiv.appendChild(productDiv);
+   });
+  }
+
+
+
+  // Fetch initial products without filters when the page loads
+
+  window.onload = function() {
+   fetchProducts('', 0, 0, false);
+  };
+ </script>
+</body>
+</html>

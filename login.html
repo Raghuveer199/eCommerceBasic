@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Login Form</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    </head>
+    <body>
+        <div class="wrapper">
+            <form action="http://localhost:5145/user/login/" method="post" enctype="multipart/form-data">
+                <h2>Login</h2>
+                
+                
+                <div class="input-box">
+                    <input type="text" placeholder="Phone Number" id="phone" required>
+                    <i class='bx bxs-envelope'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" placeholder="Password" id="password" required>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <div class="remember-forgot">
+                    <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn" onclick="loginData()">Login</button>
+                <div class="register link">
+                    <p>Don't have an account? <a href="register.html">Register</a></p>
+                </div>
+
+            </form>
+            
+        </div>
+
+        <script>
+            function forgotPassword(){
+                alert("Contact Adminstrator..!");
+            }
+
+            function loginData(){
+                var phone = document.getElementById("phone").value;
+                var password = document.getElementById("password").value;
+                console.log(phone,password);
+                $.post({
+                url: "http://localhost:5145/user/login/",
+                data: JSON.stringify({Phone : phone,Password : password}),
+                contentType: "application/json",
+                success: function (data) {
+                    if (data.message==="Login Successful")
+                    {
+                        alert("Login Successful");
+                        window.location.href=`./productsdisplay.html`;
+                    }
+                    else{
+                        alert("Login failed"+data.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                alert("Unknown error occured. Please try again");
+                console.error("Error:", xhr.responseText);
+                }
+                });
+            }
+        </script>
+    </body>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Register Form</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    </head>
+    <body>
+    <div class="wrapper">
+    <form action="localhost:5145/user/register/" method="post" enctype="multipart/form-data">
+        <h2>Register</h2>
+        
+        
+        <div class="input-box">
+            <input type="text" placeholder="Name" id="name" required>
+            <i class='bx bx-user'></i>
+        </div>
+        <div class="input-box">
+            <input type="text" placeholder="Email" id="email" required>
+            <i class='bx bxs-envelope'></i>
+        </div>
+        <div class="input-box">
+            <input type="number" placeholder="Phone number" id="phone" required>
+            <i class='bx bx-user'></i>
+        </div>
+        <div class="input-box">
+            <input type="password" placeholder="Password" id="password" required>
+            <i class='bx bxs-lock-alt'></i>
+        </div>
+        <div class="input-box">
+            <input type="password" placeholder="Confirm Password" required>
+            <i class='bx bxs-lock-alt'></i>
+        </div>
+        <button type="submit" class="btn" onclick="submitData()">Submit</button>
+
+        <div class="register link">
+            <p>Already have an account? <a href="login.html">Login</a></p>
+        </div>
+    </form>
+    </div>
+    <script>
+        function submitData(){
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var phone = document.getElementById("phone").value;
+            var password = document.getElementById("password").value;
+            console.log(name+" "+email);            
+            $.post({
+            url: "http://localhost:5145/user/register/",
+            data: JSON.stringify({ UserId : 0,
+                                    Name : name,
+                                    Email : email,
+                                    Password : password,
+                                    Phone : phone,
+                                    AccountType : "customer"
+                                }),
+            contentType: "application/json",
+            success: function (data) {
+            alert("registration successful");
+            window.location.href=`./login.html`;
+            },
+            error: function (xhr, status, error) {
+            alert("Registration failed. Please try again or change username");
+            console.error("Error:", xhr.responseText);
+            }
+            });
+        }
+    </script>
+
+    </body>

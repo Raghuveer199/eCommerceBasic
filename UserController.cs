@@ -15,7 +15,7 @@ using System.Text;
 
 namespace ECommerce.Controllers
 {
-    [Route("api/user")]
+    [Route("/user")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -24,7 +24,6 @@ namespace ECommerce.Controllers
         [HttpGet]
         public List<User> Get()
         {
-            
             return Users;
         }
         
@@ -42,22 +41,6 @@ namespace ECommerce.Controllers
             {
                 return Unauthorized("Invalid credentials");
             }
-            // Simulated successful login response
-            /*var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes("3A2F5C981EBD4F0A6725BFF8AEDC6E98E5AB60B6C634C7FC597C4E76B3A982D4");
-            var TokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim("AccountType",user.AccountType)
-                }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(TokenDescriptor);
-            var encryptedToken = tokenHandler.WriteToken(token);
-            return Ok(new {token=encryptedToken});*/
             HttpContext.Session.SetString("AccountType", user.AccountType);
             return Ok("Login Successful");
         }

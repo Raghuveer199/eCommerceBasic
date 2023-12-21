@@ -8,6 +8,7 @@ namespace ECommerce.Models
 {
     public class User
     {
+
         public int UserId { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
@@ -27,6 +28,7 @@ namespace ECommerce.Models
         [Required(ErrorMessage = "Account type is required")]
         public string AccountType { get; set; } = "customer";
 
+
         public void setPassword(string password)
         {
             using (MD5 mD = MD5.Create())
@@ -41,6 +43,16 @@ namespace ECommerce.Models
                 }
                 Password = stringbuilder.ToString();
             }
+        }
+
+        public User(int userId, string name, string email, string password, string phone, string accountType)
+        {
+            UserId = userId;
+            Name = name;
+            Email = email;
+            Password = password;
+            Phone = phone;
+            AccountType = accountType;
         }
     }
 
