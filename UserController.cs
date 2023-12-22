@@ -31,7 +31,6 @@ namespace ECommerce.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] UserLoginModel logindata)
         {
-            Console.WriteLine(logindata.Phone,":",logindata.Password);
             if (logindata == null || string.IsNullOrEmpty(logindata.Phone) || string.IsNullOrEmpty(logindata.Password))
             {
                 return BadRequest("Registered phone and password are required for login");
@@ -41,7 +40,6 @@ namespace ECommerce.Controllers
             {
                 return Unauthorized("Invalid credentials");
             }
-            HttpContext.Session.SetString("AccountType", user.AccountType);
             return Ok("Login Successful");
         }
 

@@ -14,30 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
 
-/*
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAnyOrigin",
-    builder =>
-    {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-});
-*/
- 
-
-
- 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,8 +22,10 @@ var app = builder.Build();
 
 app.Use(async (ctx, next) =>
 {
-    ctx.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:5500";
-
+ctx.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:5500";
+ctx.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+ctx.Response.Headers["Access-Control-Allow-Headers"] = "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With";
+ctx.Response.Headers["Access-Control-Allow-Methods"]="GET,POST,PUT,PATCH,DELETE,OPTIONS";
     if (HttpMethods.IsOptions(ctx.Request.Method))
     {
         ctx.Response.Headers["Access-Control-Allow-Headers"] = "*";
@@ -65,7 +44,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseSession();
 app.UseHttpsRedirection();
 app.UseRouting();
 
@@ -74,7 +52,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
-app.UseAuthorization();
 
 app.MapControllers();
 

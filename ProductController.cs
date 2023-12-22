@@ -68,12 +68,10 @@ namespace ECommerce.Controllers
         [HttpPost]
         public IActionResult Post(product Product)
         {
-            var acc_type = HttpContext.Session.GetString("AccountType");
-            Console.WriteLine($"{Product},:,{acc_type}");
-            if(acc_type != "admin")
+            /*if(acc_type != "admin")
             {
                 return Unauthorized();
-            }
+            }*/
 
             // Manual validation of product object
             if (Product == null || !ValidateProduct(Product))
@@ -95,11 +93,12 @@ namespace ECommerce.Controllers
         [HttpPut("{id}")]
         public ActionResult Put(int id, product updatedProduct)
         {
-            var acc_type = HttpContext.Session.GetString("AccountType");
+            /*
             if (acc_type != "admin")
             {
                 return Unauthorized();
             }
+            */
             try
             {
                 var productToUpdate = Products.FirstOrDefault(p => p.Id == id);
@@ -122,14 +121,14 @@ namespace ECommerce.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize(Policy = "AdminOnly")]
         public ActionResult Delete(int id)
         {
-            var acc_type = HttpContext.Session.GetString("AccountType");
+            ///var acc_type = HttpContext.Session.GetString("AccountType");
+            /*
             if (acc_type != "admin")
             {
                 return Unauthorized();
-            }
+            }*/
             try
             {
                 var productToDelete = Products.FirstOrDefault(p => p.Id == id);
