@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Product</title>
+    <link rel="stylesheet" href="updatestyle.css">
+</head>
+
+<body>
+
+    <div class="wrapper">
+    <h2>Edit Product</h2>
+    </br>
+    <form id="productForm">
+        <div class="input-box">
+        <label for="productName" id="label">Product Name</label>
+        <input type="text" id="productName" required><br><br>
+        <i class='bx bxs-envelope'></i>
+        </div>
+
+        <div class="input-box">
+        <label for="productCategory" id="label">Category</label>
+        <input type="text" id="productCategory" required><br><br>
+        </div>
+
+        <div class="input-box">
+        <label for="productPrice" id="label">Price</label>
+        <input type="number" id="productPrice" required><br><br>
+        </div>
+
+        <div class="input-box">
+        <label for="productQuantity" id="label">Quantity</label>
+        <input type="number" id="productQuantity" required><br><br>
+        </div>
+
+        <div class="input-box">
+        <label for="productDescription" id="label">Description</label>
+        <textarea id="productDescription" required></textarea><br><br>
+        </div>
+
+        <div class="input-box">
+        <label for="productImageURL" id="label">Image URL</label>
+        <input type="text" id="productImageURL" required><br><br>
+        </div>
+
+        <button type="button" onclick="updateProduct()">Update</button>
+        <button type="button" onclick="deleteProduct()">Delete</button>
+    </form>
+    </div>
+    <script>
+        const getProductIdFromUrl = () => {
+                const queryParams = new URLSearchParams(window.location.search);
+                return queryParams.get('id'); 
+            };
+
+        window.onload = function () {
+            // Fetch product details by ID and populate the form
+            const productId = getProductIdFromUrl();
+            fetch(`http://localhost:5145/product/${productId}`)
+                .then(response => response.json())
+                .then(product => fillForm(product))
+                .catch(error => console.error('Error fetching product details:', error));
+        };
+
+        function fillForm(product) {
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productQuantity').value = product.quantity;
+            document.getElementById('productDescription').value = product.description;
+            document.getElementById('productImageURL').value = product.imageURL;
+        }
+
+        function updateProduct() {
+            const productId = getProductIdFromUrl();
+            const updatedProduct = {
+                name: document.getElementById('productName').value,
+                category: document.getElementById('productCategory').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                quantity: parseInt(document.getElementById('productQuantity').value),
+                description: document.getElementById('productDescription').value,
+                imageURL: document.getElementById('productImageURL').value
+            };
+
+            // Make a PUT request to update the product
+            fetch(`http://localhost:5145/product/${productId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedProduct)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Handle successful update (e.g., show success message)
+                    console.log('Product updated successfully');
+                    window.location.href=`./productsdisplay.html`;
+                } else {
+                    // Handle error response
+                    console.error('Failed to update product');
+                }
+            })
+            .catch(error => console.error('Error updating product:', error));
+        }
+
+        function deleteProduct() {
+            const productId = getProductIdFromUrl();
+            
+            // Make a DELETE request to delete the product
+            fetch(`http://localhost:5145/product/${productId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Handle successful deletion (e.g., redirect to product list or show success message)
+                    console.log('Product deleted successfully');
+                    window.location.href=`./productsdisplay.html`;
+                } else {
+                    // Handle error response
+                    console.error('Failed to delete product');
+                }
+            })
+            .catch(error => console.error('Error deleting product:', error));
+        }
+    </script>
+</body>
+
+</html>
