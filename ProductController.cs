@@ -69,6 +69,7 @@ namespace ECommerce.Controllers
         public IActionResult Post(product Product)
         {
             var acc_type = HttpContext.Session.GetString("AccountType");
+            Console.WriteLine($"{Product},:,{acc_type}");
             if(acc_type != "admin")
             {
                 return Unauthorized();

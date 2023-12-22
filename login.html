@@ -11,9 +11,8 @@
     </head>
     <body>
         <div class="wrapper">
-            <form action="http://localhost:5145/user/login/" method="post" enctype="multipart/form-data">
+            <form>
                 <h2>Login</h2>
-                
                 
                 <div class="input-box">
                     <input type="text" placeholder="Phone Number" id="phone" required>
@@ -26,7 +25,7 @@
                 <div class="remember-forgot">
                     <a href="#" onclick="forgotPassword()">Forgot Password?</a>
                 </div>
-                <button type="submit" class="btn" onclick="loginData()">Login</button>
+                <button type="submit" class="btn">Login</button>
                 <div class="register link">
                     <p>Don't have an account? <a href="register.html">Register</a></p>
                 </div>
@@ -40,29 +39,33 @@
                 alert("Contact Adminstrator..!");
             }
 
-            function loginData(){
+            document.querySelector('form').onsubmit = loginData
+
+
+            function loginData(e){
+                e.preventDefault();
                 var phone = document.getElementById("phone").value;
                 var password = document.getElementById("password").value;
-                console.log(phone,password);
                 $.post({
                 url: "http://localhost:5145/user/login/",
-                data: JSON.stringify({Phone : phone,Password : password}),
-                contentType: "application/json",
-                success: function (data) {
-                    if (data.message==="Login Successful")
-                    {
-                        alert("Login Successful");
-                        window.location.href=`./productsdisplay.html`;
-                    }
-                    else{
-                        alert("Login failed"+data.message);
+                data: JSON.stringify({ 
+                    phone,password
+                }),
+                contentType: "application/json", 
+                success: function (data, textStatus, xhr) {
+                    if (xhr.status === 200) {
+                        alert("Login successful");
+                        window.location.href = "./productsdisplay.html"; // Redirect only on successful login response
+                    } else {
+                        alert("Unexpected response from the server");
                     }
                 },
                 error: function (xhr, status, error) {
-                alert("Unknown error occured. Please try again");
-                console.error("Error:", xhr.responseText);
+                    alert("Login failed. Please try again");
+                    console.error("Error:", xhr.responseText);
                 }
-                });
+            });
+
             }
         </script>
     </body>

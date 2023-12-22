@@ -60,5 +60,11 @@ namespace ECommerce.Models
     {
         public required string Phone { set; get; }
         public required string Password { set; get; }
+
+        public  UserLoginModel(string phone, string password)
+        {
+            Phone = phone;
+            Password = password;
+        }
     }
 }

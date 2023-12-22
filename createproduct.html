@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Create Product</h2>
+        <form>
+            <label for="productName">Product Name:</label>
+            <input type="text" id="productName" required><br><br>
+
+            <label for="productCategory">Product Category:</label>
+            <input type="text" id="productCategory" required><br><br>
+
+            <label for="productPrice">Product Price:</label>
+            <input type="number" id="productPrice" required><br><br>
+
+            <label for="productQuantity">Product Quantity:</label>
+            <input type="number" id="productQuantity" required><br><br>
+            
+            <label for="productDescription">Product Description:</label>
+            <textarea id="productDescription" required></textarea><br><br>
+
+            <label for="productimg">Product Image URL:</label>
+            <input type="text" id="productimg" required><br><br>
+
+            <button type="submit">Create Product</button>
+        </form>
+
+        <p id="message" style="display: none; color: red;"></p>
+    </div>
+
+    <script>
+        document.querySelector('form').onsubmit=createProduct;
+        function createProduct(e) {
+            e.preventDefault();
+            var productName = document.getElementById("productName").value;
+            var productCategory = document.getElementById("productCategory").value;
+            var productPrice = document.getElementById("productPrice").value;
+            var productQuantity = document.getElementById("productQuantity").value;
+            var productDescription = document.getElementById("productDescription").value;
+            var productimg = document.getElementById("productimg").value;
+
+            $.post({
+                url: "http://localhost:5145/product/", // Replace with your server endpoint
+                data: JSON.stringify({ 
+                    "name": productName,
+                    "category": productCategory,
+                    "price": productPrice,
+                    "quantity": productQuantity,
+                    "description": productDescription,
+                    "imageURL": productimg
+                }),
+                contentType: "application/json",
+                success: function (data) {
+                    // Handle success
+                    alert("Product created successfully!");
+                },
+                error: function (xhr) {
+                    // Handle error
+                    if (xhr.status === 401) {
+                        document.getElementById("message").innerText = "Unauthorized access. Only admins can create products.";
+                        document.getElementById("message").style.display = "block";
+                    } else {
+                        alert("Error: " + xhr.responseText);
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
